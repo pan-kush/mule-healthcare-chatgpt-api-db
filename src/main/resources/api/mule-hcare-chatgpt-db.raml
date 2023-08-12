@@ -1,0 +1,32 @@
+#%RAML 1.0
+title: mule-hcare-chatgpt-db-api
+version: 1.0
+
+mediaType: 
+  - application/json
+
+protocols:
+  - HTTPS
+  - HTTP
+
+traits:
+  client-id-required:  !include Traits/client-id-required.raml
+  common-responses: !include Traits/common-response.raml
+
+documentation:
+ - !include Documentation/documentation.raml    
+
+types:
+ order-details: !include DataTypes/datatype.raml
+  
+
+/order-details:
+  description: Connects with chatgpt and orders database to fetch the order placed details.
+  post:
+    is: [client-id-required,common-responses]
+    displayName: Chatgpt and Orders placed database
+    description: Connects with chatgpt and orders database to fetch the order placed details.
+    body:
+      application/json:
+       example: !include Examples/order-details.json
+       type: order-details

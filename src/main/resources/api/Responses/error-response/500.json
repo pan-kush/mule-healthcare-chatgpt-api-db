@@ -1,0 +1,7 @@
+{
+  "error_description": "Error occured while processing request",
+  "error_type": "HTTP:INTERNAL_SERVER_ERROR",
+  "error_cause": "Internal server error",
+  "transaction_id": "1eee64d0-0eb6-11ed-9766-2ad07d0017e0",
+  "timestamp": "2022-07-28T20:44:48.457Z"
+}

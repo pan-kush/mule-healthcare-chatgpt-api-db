@@ -1,0 +1,22 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  userId:
+    type: string
+    required: true
+  orderIds: 
+    type: array
+    items: 
+      type: string
+  messages: 
+    type: array
+    items: 
+      type: object
+      properties: 
+        role: 
+          type: string
+          required: true
+        content: 
+          type: string
+          required: true

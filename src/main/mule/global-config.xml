@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+    <apikit:config name="mule-hcare-chatgpt-db-config" api="mule-hcare-chatgpt-db.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<http:listener-config name="http-listener-config" doc:name="HTTP Listener config" doc:id="ccab04a0-1d6a-4348-a72d-6743f509dcee" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="postgres-database-config" doc:name="Database Config" doc:id="dfc707da-3a4c-4df7-81f3-e10fcddf47f0" >
+		<db:generic-connection url="jdbc:postgresql://localhost:5432/orders" driverClassName="org.postgresql.Driver" user="postgres" password="@Random301" />
+	</db:config>
+	<http:request-config name="http-request-configuration-chatgpt" doc:name="HTTP Request configuration" doc:id="aa457209-e7ea-401c-b676-62ce76c51f52" >
+		<http:request-connection protocol="HTTPS" />
+	</http:request-config>
+    <configuration-properties doc:name="Configuration properties" doc:id="2f7cfe93-dbcc-46ea-a294-4b2b1aef0841" file="config\common-properties.yaml" />
+    <configuration-properties doc:name="Configuration properties" doc:id="2b3d0374-794b-4238-88e3-801fe8b869d6" file="config\local.yaml" />
+    <secure-properties:config name="secure-properties-config" doc:name="Secure Properties Config" doc:id="dd37490f-6a8c-4a8e-979f-543f6c1d33cd" file="config\local.yaml" key="${enc.key}" />
+
+
+</mule>

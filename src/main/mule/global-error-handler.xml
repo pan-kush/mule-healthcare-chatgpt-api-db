@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+<error-handler name="Global_APIKit_Error_Handler">
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="1a211a5c-261f-4b8a-9b6a-746eba88917e" >
+		<ee:transform doc:name="Any Error" doc:id="3ab651ad-201f-4f46-b890-1ac0e2063806" >
+                                                                <ee:message >
+					<ee:set-payload resource="dw/api-any-error.dwl" />
+                                                                
+</ee:message>
+                                                </ee:transform>
+			<logger level="ERROR" doc:name="Logger" doc:id="ee26f524-d3ac-4666-bd23-1b04a8710ef3" message="#[payload]"/>		
+		
+		
+		</on-error-continue>
+        
+
+</error-handler>	
+	
+</mule>

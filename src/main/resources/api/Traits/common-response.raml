@@ -1,0 +1,166 @@
+#%RAML 1.0 Trait
+responses:
+  200:  
+    description: Message was processed successfully.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/success-response-dataType.raml
+        example: !include ../Responses/success-response/200.success.json
+
+  400:
+    description: Bad request was sent by user.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/400.json
+
+  401:
+    description: unauthorized request.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/401.json
+
+  403:
+    description: The request is forbidden.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/403.json
+        
+  404:
+    description: The server cannot find the requested resource.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/404.json
+  405:
+    description: The method is not supported for the requested resource.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/405.json
+  406:
+    description: The target resource does not have a current representation that would be acceptable to the user agent.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/406.json
+  415:
+    description:  The accept header specified an unsupported media type.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/415.json
+
+
+  500:
+    description: An internal error occurred while processing the API request.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/500.json
+  501:
+    description: The service is Not Implemented.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/501.json
+  503:
+    description: The service is unavailable.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/503.json
+
+
+  504:
+    description: The service had gateway timeout.
+    headers:
+      Content-Type: 
+        displayName: Content-Type
+        description: json
+        type: string
+        required: true
+        example: application/json; charset=UTF-8
+    body:
+      application/json:
+        type: !include ../DataTypes/error-response-dataType.raml
+        example: !include ../Responses/error-response/504.json

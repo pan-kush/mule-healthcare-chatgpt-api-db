@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	<flow name="chatgpt-api-request-flow" doc:id="4646805b-11f2-42f4-949b-1118f0cefad8" />
+	<flow name="select-from-database-flow" doc:id="52117f49-8eb4-445c-a27c-7547e087a64a" >
+		<db:select doc:name="Select" doc:id="c0c4d640-a299-44fd-b7bb-800c8fdb1c67" config-ref="postgres-database-config" target="dbOutput">
+			<db:sql ><![CDATA[select * from order_details;]]></db:sql>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="d10e645e-c0ad-4820-8e82-7a7bd1c5954c" message="#[vars.dbOutput]"/>
+		<http:request method="POST" doc:name="Request" doc:id="8c571205-1dae-451f-93a5-96f914a5e588" config-ref="http-request-configuration-chatgpt" url="https://api.openai.com/v1/chat/completions">
+			<http:body ><![CDATA[#[payload.chatgpt]]]></http:body>
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : vars.token
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="088cd361-d14d-42ab-afb0-2ef834557990" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.choices[0].message.content]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="7005eb77-45d1-4713-9594-9ce4ff6e9ca2" message="#[payload]" />
+	</flow>
+</mule>
