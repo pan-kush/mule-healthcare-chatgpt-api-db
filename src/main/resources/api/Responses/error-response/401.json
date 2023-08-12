@@ -1,0 +1,7 @@
+{
+    "errorDescription": "Unauthorized",
+    "errorType": "HTTP:UNAUTHORIZED",
+    "errorCause": "Unauthorized",
+    "transactionId": "b81174c0-0eb3-11ed-9766-2ad07d0017e0",
+    "timestamp": "2022-07-28T20:27:36.851Z"
+}

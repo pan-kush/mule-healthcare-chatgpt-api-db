@@ -1,0 +1,7 @@
+{
+    "error_description": "itemQuantity expected type: Number, found: String",
+    "error_type": "APIKIT:BAD_REQUEST",
+    "error_cause": "Bad Request",
+    "transaction_id": "b81174c0-0eb3-11ed-9766-2ad07d0017e0",
+    "timestamp": "2022-07-28T20:27:36.851Z"
+}

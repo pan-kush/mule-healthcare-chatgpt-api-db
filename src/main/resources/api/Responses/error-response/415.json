@@ -1,0 +1,7 @@
+{
+    "error_description": "Unsupported mediaType",
+    "error_type": "APIKIT:UNSUPPORTED_MEDIA_TYPE",
+    "error_cause": "Unsupported Media Type",
+    "transaction_id": "02e0b130-0eb6-11ed-9766-2ad07d0017e0",
+    "timestamp": "2022-07-28T20:44:01.352Z"
+}

@@ -1,0 +1,7 @@
+{
+    "error_description": "Resource not found: /item",
+    "error_type": "APIKIT:NOT_FOUND",
+    "error_cause": "Not Found",
+    "transaction_id": "ae25fa20-0eb4-11ed-9766-2ad07d0017e0",
+    "timestamp": "2022-07-28T20:34:29.708Z"
+}

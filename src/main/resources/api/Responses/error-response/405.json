@@ -1,0 +1,7 @@
+{
+    "error_description": "HTTP Method get not allowed for : /item",
+    "error_type": "APIKIT:METHOD_NOT_ALLOWED",
+    "error_cause": "Method Not Allowed",
+    "transaction_id": "45478d60-0eb5-11ed-9766-2ad07d0017e0",
+    "timestamp": "2022-07-28T20:38:43.263Z"
+}

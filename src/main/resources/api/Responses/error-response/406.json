@@ -1,0 +1,7 @@
+{
+    "error_description": "Not Acceptable",
+    "error_type": "APIKIT:NOT_ACCEPTABLE",
+    "error_cause": "Not acceptable",
+    "transaction_id": "b12f4d10-0eb5-11ed-9766-2ad07d0017e0",
+    "timestamp": "2022-07-28T20:41:44.296Z"
+}
