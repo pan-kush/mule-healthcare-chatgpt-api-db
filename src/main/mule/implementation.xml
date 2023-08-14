@@ -7,28 +7,98 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
-	<flow name="chatgpt-api-request-flow" doc:id="4646805b-11f2-42f4-949b-1118f0cefad8" />
-	<flow name="select-from-database-flow" doc:id="52117f49-8eb4-445c-a27c-7547e087a64a" >
-		<db:select doc:name="Select" doc:id="c0c4d640-a299-44fd-b7bb-800c8fdb1c67" config-ref="postgres-database-config" target="dbOutput">
-			<db:sql ><![CDATA[select * from order_details;]]></db:sql>
-		</db:select>
-		<logger level="INFO" doc:name="Logger" doc:id="d10e645e-c0ad-4820-8e82-7a7bd1c5954c" message="#[vars.dbOutput]"/>
-		<http:request method="POST" doc:name="Request" doc:id="8c571205-1dae-451f-93a5-96f914a5e588" config-ref="http-request-configuration-chatgpt" url="https://api.openai.com/v1/chat/completions">
-			<http:body ><![CDATA[#[payload.chatgpt]]]></http:body>
-			<http:headers ><![CDATA[#[output application/java
+	<flow name="chatgpt-api-request-flow" doc:id="4646805b-11f2-42f4-949b-1118f0cefad8" >
+		<ee:transform doc:name="set text payload variable" doc:id="1723a2e1-2700-4b33-97e6-6ba2aaae75e8">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="textPayload"><![CDATA[%dw 2.0
+output text/plain
+var jsonString = write(payload, "application/json")
+---
+jsonString]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="set flowname and final context" doc:id="4a1355b8-4912-439a-9cb2-1af46142f8b9" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName"><![CDATA[%dw 2.0
+output application/java
+---
+flow.name]]></ee:set-variable>
+				<ee:set-variable resource="dw/final-context.dwl" variableName="finalContext" />
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="set chatgpt payload" doc:id="0171fd22-b7b3-455d-8045-22e184a08b11">
+            <ee:message>
+                <ee:set-payload resource="dw/final-request.dwl" />
+            </ee:message>
+        </ee:transform>
+		<http:request method="POST" doc:name="Request to chatgpt api" doc:id="6f0635ce-8fd6-45de-bd05-fccea6cafe78" config-ref="http-request-configuration-chatgpt" url="https://api.openai.com/v1/chat/completions" target="initialResponse">
+            <http:headers><![CDATA[#[output application/java
 ---
 {
-	"Authorization" : vars.token
+	"Authorization" : "Bearer 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"
 }]]]></http:headers>
-		</http:request>
-		<ee:transform doc:name="Transform Message" doc:id="088cd361-d14d-42ab-afb0-2ef834557990" >
+        </http:request>
+        <ee:transform doc:name="fetch content from chatgpt initial response" doc:id="03d322aa-fb14-4de7-ba6e-52131eca4be8">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.initialResponse.choices[0].message.content]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>	</flow>
+	<flow name="select-from-database-flow" doc:id="52117f49-8eb4-445c-a27c-7547e087a64a" >
+		<http:listener doc:name="Listener" doc:id="3049b33d-1426-4e28-8656-f828cae2a089" config-ref="http-listener-config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="fe3c13e3-292f-4af5-9135-4744bc2ab0e7" message="#[vars.orderIds]"/>
+		<set-variable value="#[flow.name]" doc:name="Set flow name Variable" doc:id="d3ff8e10-be84-4113-a3a4-301b170bcae2" variableName="flowName"/>
+		<ee:transform doc:name="set varibale for query inputs" doc:id="c94c8c89-9982-4403-8852-39e0295faeee" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="orders" ><![CDATA[%dw 2.0
+output application/json
+---
+"'" ++ (vars.orderIds distinctBy $ joinBy("','")) ++ "'"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="set select query variable" doc:id="e636a9dd-7a31-4e70-930f-ca3a6eb74909" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-payload.choices[0].message.content]]></ee:set-payload>
+'select order_id, product_name, current_location ,delivery_address ,expected_date ,delivery_date ,delivered_status from order_details where order_id in (' ++ vars.orders ++ ')']]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="7005eb77-45d1-4713-9594-9ce4ff6e9ca2" message="#[payload]" />
+		<db:select doc:name="Select from db" doc:id="c0c4d640-a299-44fd-b7bb-800c8fdb1c67" config-ref="postgres-database-config">
+			<db:sql ><![CDATA[#[payload]]]></db:sql>
+		
+</db:select>
+		<choice doc:name="Choice" doc:id="7448bcb2-14d2-49c9-818f-a193cbb3e23b" >
+			<when expression="#[payload != null]">
+				<ee:transform doc:name="Transform Message" doc:id="088cd361-d14d-42ab-afb0-2ef834557990">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				<flow-ref doc:name="Flow Reference to chatgpt-api-request-flow" doc:id="8dd30ba4-dd78-466a-a54e-731f6b0a8b8d" name="chatgpt-api-request-flow" />
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="f6ab2a2c-4309-4b1a-a4f3-c1523af9f8f4" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"Please provide us with the correct order ids as we could not find any order id related to this in your account"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="d10e645e-c0ad-4820-8e82-7a7bd1c5954c" message="#[payload]" />
 	</flow>
 </mule>

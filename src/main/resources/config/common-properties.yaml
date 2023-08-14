@@ -1,12 +1,12 @@
 http:
   host: "0.0.0.0"
   port: "8081"
+  reconnection:
+    frequency: "500"
+    attempts: "2"
   error.message: "Error occurred while processing the HTTP request"
   exp.message: "Error occurred while processing message in Mule"
   any.message: "An error occurred in processing Mule event"
   chatgpt:
     max.connection : "-1"
     max.idleTimeoutConn: "30000"
-    reconnection:
-      frequency: "2000"
-      attempts: "2"
