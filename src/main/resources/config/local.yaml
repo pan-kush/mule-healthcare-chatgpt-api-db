@@ -1,0 +1,7 @@
+chatgpt:
+  token: "![MyePzi32V8hl911V8xKE1aEdzzTAxMTjNQ7sMEyjyG5GQDaQVkT+eSQ4Xsg7p7n2oy7QLK8GiPj96dumUt2eBQ==]"
+  
+database:
+  url: "jdbc:postgresql://localhost:5432/orders"
+  user: "postgres"
+  password: "![xWhsDdo45Fa20ErMWPjR+A==]"
