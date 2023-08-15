@@ -3,7 +3,7 @@ let messagesList = [];
 function getAsssistantResponse (message) {
   messagesList.push({role:"user", content: message});
   renderMessage(message, "user");
-  axios.post('http://localhost:8081/api/order-details' ,{
+  axios.post('http://127.0.0.1:5000/chat' ,{
         "userId": "zx1",
         "messages": messagesList
     }
@@ -15,11 +15,11 @@ function getAsssistantResponse (message) {
   }}).then((res) => {
     console.log(res);
 
-    messagesList.push({role: "assistant", content: res.body});
-      renderMessage(res.body, 'assistant');
+    messagesList.push({role: "assistant", content: res.data});
+      renderMessage(res.data, 'assistant');
   }).catch((err) => {
     
-    renderMessage("Error fetching response try again", 'assistant')
+    renderMessage(res.data.error, 'assistant')
   }) 
 }
 

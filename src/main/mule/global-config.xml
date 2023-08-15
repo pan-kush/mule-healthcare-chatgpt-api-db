@@ -27,5 +27,4 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
     <configuration-properties doc:name="env-configuration-properties" doc:id="2b3d0374-794b-4238-88e3-801fe8b869d6" file="config\local.yaml" />
     <secure-properties:config name="secure-properties-config" doc:name="Secure Properties Config" doc:id="dd37490f-6a8c-4a8e-979f-543f6c1d33cd" file="config\local.yaml" key="${enc.key}" />
 
-
 </mule>

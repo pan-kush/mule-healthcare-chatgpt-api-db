@@ -22,6 +22,15 @@ types:
 
 /order-details:
   description: Connects with chatgpt and orders database to fetch the order placed details.
+  options:
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              methods: ["POST"]
+              headers: ["client_id", "client_secret", "Content-Type"]
+##              maxAge: 3600
   post:
     is: [client-id-required,common-responses]
     displayName: Chatgpt and Orders placed database
