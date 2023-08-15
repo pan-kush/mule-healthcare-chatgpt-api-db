@@ -14,12 +14,19 @@ function getAsssistantResponse (message) {
     'Content-Type': 'application/json'
   }}).then((res) => {
     console.log(res);
-
-    messagesList.push({role: "assistant", content: res.data});
+    
+    if (typeof res.data === "object")
+    {
+    messagesList.push({role: "assistant", content: res.data.error});
+      renderMessage(res.data.error, 'assistant');
+    }
+    else {
+      messagesList.push({role: "assistant", content: res.data});
       renderMessage(res.data, 'assistant');
+    }
   }).catch((err) => {
     
-    renderMessage(res.data.error, 'assistant')
+    renderMessage(res.data, 'assistant')
   }) 
 }
 
@@ -37,12 +44,16 @@ function renderMessage (message, actor) {
   if(actor === "user"){
     chatMessage.classList.add("chat-message--left");
   }
-  chatMessage.textContent = (actor === "assistant" ? "A: " : "You: ") + message;
+  chatMessage.textContent = (actor === "assistant" ? "Assistant: " : "You: ") + message;
   chatWindow.append(chatMessage);
   document.getElementById("chatInput").value = "";
+
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 }
  
 document.querySelector(".chat-window-header")
   .addEventListener("click", function () {
   document.querySelector(".chat-window").classList.toggle("collapsed");
+
+
 });

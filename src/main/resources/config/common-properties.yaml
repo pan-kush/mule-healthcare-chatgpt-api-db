@@ -9,4 +9,4 @@ http:
   any.message: "An error occurred in processing Mule event"
   chatgpt:
     max.connection : "-1"
-    max.idleTimeoutConn: "30000"
+    max.idleTimeoutConn: "45000"

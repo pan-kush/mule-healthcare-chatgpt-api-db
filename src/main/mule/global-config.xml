@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
     <apikit:config name="mule-hcare-chatgpt-db-config" api="mule-hcare-chatgpt-db.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<http:listener-config name="http-listener-config" doc:name="HTTP Listener config" doc:id="ccab04a0-1d6a-4348-a72d-6743f509dcee" >
-		<http:listener-connection host="${http.host}" port="${http.port}" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" readTimeout="45000" connectionIdleTimeout="60000">
 			<reconnection >
 				<reconnect frequency="${http.reconnection.frequency}" count="${http.reconnection.attempts}" />
 			</reconnection>
@@ -20,8 +20,12 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	<db:config name="postgres-database-config" doc:name="Database Config" doc:id="dfc707da-3a4c-4df7-81f3-e10fcddf47f0" >
 		<db:generic-connection url="${database.url}" driverClassName="org.postgresql.Driver" user="${database.user}" password="${secure::database.password}" />
 	</db:config>
-	<http:request-config name="http-request-configuration-chatgpt" doc:name="HTTP Request configuration" doc:id="aa457209-e7ea-401c-b676-62ce76c51f52" >
-		<http:request-connection protocol="HTTPS" maxConnections="${http.chatgpt.max.connection}" connectionIdleTimeout="${http.chatgpt.max.idleTimeoutConn}"/>
+	<http:request-config name="http-request-configuration-chatgpt" doc:name="HTTP Request configuration" doc:id="aa457209-e7ea-401c-b676-62ce76c51f52" responseTimeout="90000">
+		<http:request-connection protocol="HTTPS" maxConnections="${http.chatgpt.max.connection}" connectionIdleTimeout="${http.chatgpt.max.idleTimeoutConn}">
+			<reconnection >
+				<reconnect frequency="5000" />
+			</reconnection>
+		</http:request-connection>
 	</http:request-config>
     <configuration-properties doc:name="common-configuration-properties" doc:id="2f7cfe93-dbcc-46ea-a294-4b2b1aef0841" file="config\common-properties.yaml" />
     <configuration-properties doc:name="env-configuration-properties" doc:id="2b3d0374-794b-4238-88e3-801fe8b869d6" file="config\local.yaml" />

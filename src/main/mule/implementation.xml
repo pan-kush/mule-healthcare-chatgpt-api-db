@@ -35,13 +35,15 @@ flow.name]]></ee:set-variable>
                 <ee:set-payload resource="dw/final-request.dwl" />
             </ee:message>
         </ee:transform>
-		<http:request method="POST" doc:name="Request to chatgpt api" doc:id="6f0635ce-8fd6-45de-bd05-fccea6cafe78" config-ref="http-request-configuration-chatgpt" url="https://api.openai.com/v1/chat/completions" target="initialResponse">
+		<until-successful maxRetries="2" doc:name="Until Successful" doc:id="4ca3b3bd-d32f-4154-9033-71f68ed4cc65" millisBetweenRetries="10000">
+			<http:request method="POST" doc:name="Request to chatgpt api" doc:id="6f0635ce-8fd6-45de-bd05-fccea6cafe78" config-ref="http-request-configuration-chatgpt" url="https://api.openai.com/v1/chat/completions" target="initialResponse" responseTimeout="45000">
             <http:headers><![CDATA[#[output application/java
 ---
 {
 	"Authorization" : "Bearer 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"
 }]]]></http:headers>
         </http:request>
+		</until-successful>
         <ee:transform doc:name="fetch content from chatgpt initial response" doc:id="03d322aa-fb14-4de7-ba6e-52131eca4be8">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
