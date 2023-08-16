@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace</title>
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Marketplace</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">New Arrivals</a>
+      <a href="#">Wish List</a>
+      <a href="#">Orders</a>
+    </nav>
+    <div class="profile">
+      <img src="https://via.placeholder.com/40" alt="Profile Photo">
+      <span>User Name</span>
+    </div>
+  </header>
+  <main>
+    <img class="banner" src="https://via.placeholder.com/1200x300" alt="Banner Image">
+    <div class="product-list">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200" alt="Product 1">
+        <h3>Product 1</h3>
+        <p>$19.99</p>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200" alt="Product 2">
+        <h3>Product 2</h3>
+        <p>$29.99</p>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200" alt="Product 3">
+        <h3>Product 3</h3>
+        <p>$14.99</p>
+      </div>
+      <!-- Add more product items as needed -->
+    </div>
+  </main>
+  <div class="chat-window">
+    <div class="chat-window-header">
+      <span>Assistant</span>
+    </div>
+    <div class="chat-messages">
+      
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+</body>
+
+<script src="static/js/script.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</html>

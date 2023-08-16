@@ -10,7 +10,8 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <ee:transform doc:name="Set flow name and transactionId" doc:id="be78c694-768b-463e-b922-c600f6839682">
+        <logger level="INFO" doc:name="Logger" doc:id="0cc412e9-560b-45fa-954a-3b0451a75bf7" message="Inside API"/>
+		<ee:transform doc:name="Set flow name and transactionId" doc:id="be78c694-768b-463e-b922-c600f6839682">
             <ee:message />
             <ee:variables>
                 <ee:set-variable variableName="flowName"><![CDATA[%dw 2.0
@@ -27,8 +28,8 @@ correlationId]]></ee:set-variable>
         <error-handler ref="global-error-handler" />
     </flow>
     <flow name="post:\order-details:application\json:mule-hcare-chatgpt-db-config">
-        <logger level="INFO" doc:name="Logger" doc:id="f1fc2ea4-6fac-402b-aacc-a5c79cde0a92" message="#[payload]"/>
-		<ee:transform doc:name="set initial payload and variables" doc:id="e8fe1f54-2299-4c04-a7fe-f75701073461">
+        <logger level="INFO" doc:name="Logger" doc:id="f1fc2ea4-6fac-402b-aacc-a5c79cde0a92" message="#[payload]" />
+        <ee:transform doc:name="set initial payload and variables" doc:id="e8fe1f54-2299-4c04-a7fe-f75701073461">
             <ee:message />
             <ee:variables>
                 <ee:set-variable variableName="initialPayload"><![CDATA[%dw 2.0
@@ -62,21 +63,39 @@ output application/json
 vars.initialResponse.choices[0].message.content]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-        <choice doc:name="Choice on payload if it contains order ids" doc:id="bbdc71fe-9e1e-434c-9a49-2dff39d3b18d" >
-			<when expression='#[upper(payload) contains "["]'>
-<logger level="INFO" doc:name="Logger" doc:id="cc9bda0d-e2a2-4fd5-a2de-79956e0519c0" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"status": "Initial response has order Ids",&#10;	"payload": payload&#10;}]' />
-				<ee:transform doc:name="extract order ids from response" doc:id="ca042365-0e4e-4392-b682-b29a2df94a53">
-					<ee:message>
-					</ee:message>
-					<ee:variables>
-						<ee:set-variable resource="dw/extract-order-ids.dwl" variableName="orderIds" />
-					</ee:variables>
-				</ee:transform>
-								<flow-ref doc:name="Flow Reference to select-from-database-flow" doc:id="44381c3b-3454-45ef-92de-781ae6581aa2" name="select-from-database-flow" />
-			</when>
-			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="e76130a9-5b5e-43de-8759-dd2e6de64c0d" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"status": "Initial response does not contain order Ids",&#10;	"payload": payload&#10;}]'/>
-			</otherwise>
-		</choice>
+        <choice doc:name="Choice on payload if it contains order ids" doc:id="bbdc71fe-9e1e-434c-9a49-2dff39d3b18d">
+            <when expression="#[upper(payload) contains &quot;[&quot;]">
+                <logger level="INFO" doc:name="Logger" doc:id="cc9bda0d-e2a2-4fd5-a2de-79956e0519c0" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;{&#xA; &quot;status&quot;: &quot;Initial response has order Ids&quot;,&#xA; &quot;payload&quot;: payload&#xA;}]" />
+                <ee:transform doc:name="extract order ids from response" doc:id="ca042365-0e4e-4392-b682-b29a2df94a53">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable resource="dw/extract-order-ids.dwl" variableName="orderIds" />
+                    </ee:variables>
+                </ee:transform>
+                <flow-ref doc:name="Flow Reference to select-from-database-flow" doc:id="44381c3b-3454-45ef-92de-781ae6581aa2" name="select-from-database-flow" />
+            </when>
+            <otherwise>
+                <logger level="INFO" doc:name="Logger" doc:id="e76130a9-5b5e-43de-8759-dd2e6de64c0d" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;{&#xA; &quot;status&quot;: &quot;Initial response does not contain order Ids&quot;,&#xA; &quot;payload&quot;: payload&#xA;}]" />
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="options:\order-details:mule-hcare-chatgpt-db-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  methods: [
+    "POST"
+  ],
+  headers: [
+    "client_id", 
+    "client_secret", 
+    "Content-Type"
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
     </flow>
 </mule>
