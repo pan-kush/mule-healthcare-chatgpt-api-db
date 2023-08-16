@@ -1,5 +1,5 @@
 chatgpt:
-  token: "![MyePzi32V8hl911V8xKE1aEdzzTAxMTjNQ7sMEyjyG5GQDaQVkT+eSQ4Xsg7p7n2oy7QLK8GiPj96dumUt2eBQ==]"
+  token: "![wYUYx00UeNiW1VYMAjQXFXfctilGhrO4J272yAoTpPqs/SMF7OY+LBEHk+C+Xt7+OSP8kVEAca8o3RWtmT5zgA==]"
   
 database:
   url: "jdbc:postgresql://localhost:5432/orders"

@@ -53,7 +53,7 @@ flow.name]]></ee:set-variable>
             <http:headers><![CDATA[#[output application/java
 ---
 {
-	"Authorization" : "Bearer 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"
+	"Authorization" : "Bearer " ++ Mule::p('secure::chatgpt.token')
 }]]]></http:headers>
         </http:request>
 		</until-successful>
