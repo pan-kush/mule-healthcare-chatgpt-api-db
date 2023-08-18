@@ -5,5 +5,6 @@ var initialContext = {'role': 'system', 'content': vars.initialContext}
 ---
 {
         "model": "gpt-3.5-turbo",
+        "temperature": 0.3,
         "messages": [botContext,initialContext] ++ payload.messages
 }
