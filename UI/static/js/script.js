@@ -5,7 +5,7 @@ function getAsssistantResponse (message) {
   renderMessage(message, "user");
   axios.post('http://127.0.0.1:5000/chat' ,{
         "userId": "zx1",
-        "messages": messagesList
+        "messages": messagesList.slice(-3,)
     }
  ,{
     headers: {
@@ -14,6 +14,11 @@ function getAsssistantResponse (message) {
     'Content-Type': 'application/json'
   }}).then((res) => {
     console.log(res);
+    var button = document.getElementById("send-button");
+    button.disabled = false;
+    var button2 = document.getElementById("chatInput");
+    button2.disabled = false;
+    document.querySelector("#send-button").classList.toggle("disabled")
     
     if (typeof res.data === "object")
     {
@@ -31,6 +36,11 @@ function getAsssistantResponse (message) {
 }
 
 function sendMessage() {
+  var button = document.getElementById("send-button");
+  button.disabled = true;
+  var button2 = document.getElementById("chatInput");
+  button2.disabled = true;
+  document.querySelector("#send-button").classList.toggle("disabled")
   const input = document.getElementById("chatInput");
   const message = input.value.trim();
   if (message !== "") {

@@ -133,6 +133,9 @@ body {
     border-radius: 12px;
     cursor: pointer;
   }
+  .disabled{
+    background-color: grey !important
+  }
   .initial-chat {
     background-color: #f2f2f2;
     border: 1px solid #333;
